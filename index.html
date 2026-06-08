@@ -298,6 +298,7 @@ async function submitReport() {
   document.getElementById('loading-area').style.display = 'block';
 
   try {
+    // 사진은 별도 POST로 처리 (GET URL 길이 제한 우회)
     const r = await gas({
       action:   'submit',
       type:     sType,
@@ -305,9 +306,17 @@ async function submitReport() {
       location: document.getElementById('location').value.trim(),
       detail:   document.getElementById('detail').value.trim(),
       contact:  document.getElementById('contact').value.trim(),
-      reward:   sReward,
-      photo:    photoB64
+      reward:   sReward
     });
+    // 신고 성공 후 사진 업로드 (있을 경우)
+    if (r.ok && photoB64) {
+      try {
+        await fetch(GAS, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'photo', id: r.id, photo: photoB64 })
+        });
+      } catch(pe) { console.warn('사진 업로드 실패:', pe); }
+    }
     document.getElementById('loading-area').style.display = 'none';
     if (r.ok) {
       document.getElementById('success-area').style.display = 'block';
