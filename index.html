@@ -245,11 +245,9 @@ function saveUrl() {
 // ── GAS 호출 ──
 async function gasPost(body) {
   if (!GAS_URL) throw new Error('Apps Script URL이 설정되지 않았습니다.');
-  const res = await fetch(GAS_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
+  // POST 대신 GET으로 전환 (Apps Script CORS 우회)
+  const params = new URLSearchParams(body).toString();
+  const res = await fetch(GAS_URL + '?' + params);
   return res.json();
 }
 async function gasGet(params) {
