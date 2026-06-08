@@ -108,7 +108,10 @@ textarea{resize:none;height:80px}
   position: fixed; inset: 0;
   background: rgba(0,0,0,0.7);
   z-index: 200;
-  display: flex; align-items: center; justify-content: center;
+  display: none; align-items: center; justify-content: center;
+}
+.admin-login.open {
+  display: flex;
 }
 .admin-login-box {
   background: var(--card);
@@ -230,7 +233,7 @@ textarea{resize:none;height:80px}
 
 
 <!-- 관리자 로그인 오버레이 -->
-<div class="admin-login" id="admin-login" style="display:none">
+<div class="admin-login" id="admin-login">
   <div class="admin-login-box">
     <div class="lock">🔐</div>
     <h3>관리자 로그인</h3>
@@ -277,7 +280,7 @@ function checkAdminPw() {
   const pw = document.getElementById('admin-pw').value;
   if (pw === ADMIN_PW) {
     adminUnlocked = true;
-    document.getElementById('admin-login').style.display = 'none';
+    document.getElementById('admin-login').classList.remove('open');
     renderAdmin();
   } else {
     document.getElementById('pw-error').style.display = 'block';
@@ -333,7 +336,7 @@ function switchTab(t) {
   document.getElementById('tab-'+t).classList.add('active');
   if (t === 'admin') {
     if (!adminUnlocked) {
-      document.getElementById('admin-login').style.display = 'flex';
+      document.getElementById('admin-login').classList.add('open');
       setTimeout(() => document.getElementById('admin-pw').focus(), 100);
     } else {
       renderAdmin();
