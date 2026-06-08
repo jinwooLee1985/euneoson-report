@@ -214,7 +214,7 @@ textarea{resize:none;height:80px}
 
 <script>
 // ── 설정 ──
-const GAS             = 'https://script.google.com/macros/s/AKfycbxlQ5CftV39dwoutqBgZ01Ejxq0v06OmahRj2e0riBcON5RQAFQoXlq3SF_7OX2SJGzhw/exec';
+const GAS             = 'https://script.google.com/macros/s/AKfycbyr7v8nyo6VtwNd1k8IRrRykn4EqhwJaZx1Cm4_96A37YNQQa3d_BS2BuI3GWe905p53g/exec';
 const ADMIN_PW        = '1234';
 const CLD_CLOUD       = 'dcmacd0rf';
 const CLD_PRESET      = 'euneoson_report';
@@ -225,7 +225,11 @@ let sType = '', sReward = '', photoUrl = '', curReport = null, adminOK = false;
 
 // ── GAS GET 호출 ──
 async function gas(params) {
-  const res = await fetch(GAS + '?' + new URLSearchParams(params).toString());
+  // photo URL이 URLSearchParams로 인코딩 시 깨지는 문제 방지
+  const parts = Object.entries(params).map(([k,v]) =>
+    encodeURIComponent(k) + '=' + encodeURIComponent(v||'')
+  );
+  const res = await fetch(GAS + '?' + parts.join('&'));
   return res.json();
 }
 
