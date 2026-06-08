@@ -221,7 +221,7 @@ textarea{resize:none;height:80px}
 </div>
 
 <script>
-const GAS = 'https://script.google.com/macros/s/AKfycbwHxcHziGABzXh0pjLwIt4trcaEP1zrCAPqSGqpfoG_Tn2LdanVHT2TI2pQvCdUZxCXEw/exec';
+const GAS = 'https://script.google.com/macros/s/AKfycbxlQ5CftV39dwoutqBgZ01Ejxq0v06OmahRj2e0riBcON5RQAFQoXlq3SF_7OX2SJGzhw/exec';
 const ADMIN_PW = '1234'; // ← 비밀번호 변경 시 여기 수정
 
 let sType = '', sReward = '', photoB64 = '', photoUploadUrl = '', curReport = null, adminOK = false;
@@ -279,7 +279,7 @@ const CLOUDINARY_CLOUD = 'dcmacd0rf';
 const CLOUDINARY_PRESET = 'euneoson_report'; // unsigned upload preset (아래 설명 참조)
 const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`;
 
-let photoUploadUrl = ''; // 업로드 완료 후 URL 저장
+// photoUploadUrl은 위 227번 줄에서 선언됨
 
 // ── 사진 처리 (Cloudinary 업로드) ──
 function handlePhoto(e) {
