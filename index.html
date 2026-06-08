@@ -221,10 +221,10 @@ textarea{resize:none;height:80px}
 </div>
 
 <script>
-const GAS = 'https://script.google.com/macros/s/AKfycbxlQ5CftV39dwoutqBgZ01Ejxq0v06OmahRj2e0riBcON5RQAFQoXlq3SF_7OX2SJGzhw/exec';
+const GAS = 'https://script.google.com/macros/s/AKfycbwHxcHziGABzXh0pjLwIt4trcaEP1zrCAPqSGqpfoG_Tn2LdanVHT2TI2pQvCdUZxCXEw/exec';
 const ADMIN_PW = '1234'; // ← 비밀번호 변경 시 여기 수정
 
-let sType = '', sReward = '', photoB64 = '', curReport = null, adminOK = false;
+let sType = '', sReward = '', photoB64 = '', photoUploadUrl = '', curReport = null, adminOK = false;
 
 // ── GAS 호출 (GET 방식) ──
 async function gas(params) {
@@ -274,39 +274,58 @@ function selReward(el, r) {
   el.classList.add('sel'); sReward = r;
 }
 
-// ── 사진 처리 (리사이즈 후 저장) ──
+// ── Cloudinary 설정 ──
+const CLOUDINARY_CLOUD = 'dcmacd0rf';
+const CLOUDINARY_PRESET = 'euneoson_report'; // unsigned upload preset (아래 설명 참조)
+const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`;
+
+let photoUploadUrl = ''; // 업로드 완료 후 URL 저장
+
+// ── 사진 처리 (Cloudinary 업로드) ──
 function handlePhoto(e) {
   const file = e.target.files[0];
   if (!file) return;
   const pv = document.getElementById('ppreview');
   pv.style.display = 'flex';
   document.getElementById('pzone').style.display = 'none';
+  photoUploadUrl = ''; // 초기화
 
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const original = new Image();
-    original.onload = () => {
-      // 최대 800px로 리사이즈
-      const MAX = 800;
-      let w = original.width, h = original.height;
-      if (w > MAX || h > MAX) {
-        if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
-        else       { w = Math.round(w * MAX / h); h = MAX; }
+  // 미리보기
+  const img = document.createElement('img');
+  img.src = URL.createObjectURL(file);
+  img.style.cssText = 'width:72px;height:72px;object-fit:cover;border-radius:8px;border:1px solid var(--border)';
+  pv.innerHTML = '';
+  pv.appendChild(img);
+
+  // 업로드 중 표시
+  const status = document.createElement('div');
+  status.id = 'photo-status';
+  status.style.cssText = 'font-size:11px;color:var(--muted);margin-top:6px;width:100%';
+  status.textContent = '📤 사진 업로드 중...';
+  pv.appendChild(status);
+
+  // Cloudinary 업로드
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', CLOUDINARY_PRESET);
+
+  fetch(CLOUDINARY_URL, { method: 'POST', body: fd })
+    .then(r => r.json())
+    .then(data => {
+      if (data.secure_url) {
+        photoUploadUrl = data.secure_url;
+        status.textContent = '✅ 사진 업로드 완료';
+        status.style.color = 'var(--green)';
+        console.log('사진 URL:', photoUploadUrl);
+      } else {
+        status.textContent = '⚠ 업로드 실패: ' + (data.error?.message || '알 수 없는 오류');
+        status.style.color = 'var(--red)';
       }
-      const canvas = document.createElement('canvas');
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(original, 0, 0, w, h);
-      photoB64 = canvas.toDataURL('image/jpeg', 0.7); // 품질 70%
-
-      const img = document.createElement('img');
-      img.src = photoB64;
-      img.style.cssText = 'width:72px;height:72px;object-fit:cover;border-radius:8px;border:1px solid var(--border)';
-      pv.innerHTML = ''; pv.appendChild(img);
-      console.log('사진 크기:', Math.round(photoB64.length/1024) + 'KB');
-    };
-    original.src = ev.target.result;
-  };
-  reader.readAsDataURL(file);
+    })
+    .catch(err => {
+      status.textContent = '⚠ 업로드 오류: ' + err.message;
+      status.style.color = 'var(--red)';
+    });
 }
 
 // ── 신고 제출 ──
@@ -355,7 +374,7 @@ async function submitReport() {
 
 // ── 폼 초기화 ──
 function resetForm() {
-  sType = ''; sReward = ''; photoB64 = '';
+  sType = ''; sReward = ''; photoB64 = ''; photoUploadUrl = '';
   document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('sel'));
   document.querySelectorAll('.reward-btn').forEach(b => b.classList.remove('sel'));
   ['plate','location','detail','contact'].forEach(id => document.getElementById(id).value = '');
