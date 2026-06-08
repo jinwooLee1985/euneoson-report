@@ -9,12 +9,6 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--navy:#1F4E79;--navy2:#2E75B6;--green:#1D9E75;--red:#C00000;--amber:#E26B0A;--bg:#f4f6f9;--card:#fff;--border:#dde2ea;--text:#1a1a2e;--muted:#6b7280;--r:12px}
 body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-
-/* ── 설정 배너 ── */
-.setup-banner{background:#FFF2CC;border-bottom:2px solid #E26B0A;padding:10px 20px;font-size:12px;color:#7F4E00;display:flex;align-items:center;gap:8px}
-.setup-banner input{flex:1;padding:6px 10px;border:1px solid #E26B0A;border-radius:6px;font-size:12px;font-family:'Noto Sans KR',sans-serif}
-.setup-banner button{padding:6px 14px;background:#E26B0A;color:#fff;border:none;border-radius:6px;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
-
 .header{background:var(--navy);padding:16px 20px;display:flex;align-items:center;gap:12px}
 .header-icon{width:36px;height:36px;background:rgba(255,255,255,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
 .header-text h1{color:#fff;font-size:16px;font-weight:700}
@@ -49,7 +43,6 @@ textarea{resize:none;height:80px}
 .reward-btn.sel{border-color:var(--amber);background:#FFF5E6}
 .submit-btn{width:100%;padding:14px;background:var(--navy);color:#fff;border:none;border-radius:10px;font-family:'Noto Sans KR',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
 .submit-btn:hover{background:var(--navy2);transform:translateY(-1px)}
-.submit-btn:active{transform:scale(.98)}
 .submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .loading{display:none;text-align:center;padding:40px 20px}
 .loading .spin{font-size:36px;animation:spin 1s linear infinite;display:block;margin-bottom:12px}
@@ -58,10 +51,19 @@ textarea{resize:none;height:80px}
 .success .bi{font-size:56px;margin-bottom:16px}
 .success h2{font-size:20px;font-weight:700;color:var(--green);margin-bottom:8px}
 .success p{font-size:13px;color:var(--muted);line-height:1.7}
-.code-box{margin:20px auto;background:#EAF3DE;border:2px solid var(--green);border-radius:12px;padding:16px 24px;display:inline-block}
-.code-label{font-size:11px;color:var(--green);font-weight:700;margin-bottom:4px}
-.code-num{font-size:32px;font-weight:700;color:var(--green);letter-spacing:6px;font-family:monospace}
-.code-hint{font-size:11px;color:var(--muted);margin-top:6px}
+.notice-box{background:#EBF3FB;border-left:3px solid var(--navy2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--navy);line-height:1.6;margin-bottom:14px}
+/* 관리자 로그인 */
+.pw-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center}
+.pw-box{background:#fff;border-radius:16px;padding:32px 28px;width:300px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.2)}
+.pw-box .lock{font-size:40px;margin-bottom:12px}
+.pw-box h3{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.pw-box p{font-size:12px;color:var(--muted);margin-bottom:20px}
+.pw-box input[type=password]{width:100%;padding:12px;border:1.5px solid var(--border);border-radius:8px;font-family:'Noto Sans KR',sans-serif;font-size:18px;text-align:center;letter-spacing:6px;outline:none;margin-bottom:12px}
+.pw-box input[type=password]:focus{border-color:var(--navy)}
+.pw-box .pw-btn{width:100%;padding:12px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
+.pw-box .pw-btn:hover{background:var(--navy2)}
+.pw-err{font-size:12px;color:var(--red);margin-top:8px;display:none}
+/* 관리자 */
 .admin-header{background:linear-gradient(135deg,#1F4E79,#2E75B6);border-radius:var(--r);padding:16px 20px;color:#fff;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
 .admin-header h2{font-size:15px;font-weight:700}
 .admin-header p{font-size:11px;opacity:.7}
@@ -82,78 +84,26 @@ textarea{resize:none;height:80px}
 .report-meta{font-size:11px;color:var(--muted)}
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:flex-end;justify-content:center}
 .modal-overlay.open{display:flex}
-.modal{background:var(--card);border-radius:20px 20px 0 0;padding:20px;width:100%;max-width:600px;max-height:85vh;overflow-y:auto}
+.modal{background:#fff;border-radius:20px 20px 0 0;padding:20px;width:100%;max-width:600px;max-height:85vh;overflow-y:auto}
 .modal-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
 .modal-title{font-size:16px;font-weight:700;margin-bottom:16px;color:var(--navy)}
 .detail-row{display:flex;gap:8px;margin-bottom:10px}
 .detail-label{font-size:12px;color:var(--muted);min-width:80px;padding-top:1px}
 .detail-val{font-size:13px;font-weight:500;flex:1}
 .action-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
-.action-btn{padding:12px;border:none;border-radius:10px;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
+.action-btn{padding:12px;border:none;border-radius:10px;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;cursor:pointer}
 .ac{background:var(--green);color:#fff}
 .arj{background:#FFE0E0;color:var(--red)}
-.ac:hover,.arj:hover{opacity:.9}
-.ac:disabled,.arj:disabled{opacity:.5;cursor:not-allowed}
 .auth-code-display{background:#EAF3DE;border:2px solid var(--green);border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;margin-top:12px}
 .auth-code-display .lbl{font-size:11px;color:var(--green);font-weight:700}
 .auth-code-display .cd{font-size:22px;font-weight:700;color:var(--green);letter-spacing:4px;font-family:monospace}
 .tab-content{display:none}
 .tab-content.active{display:block}
-.notice-box{background:#EBF3FB;border-left:3px solid var(--navy2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--navy);line-height:1.6;margin-bottom:14px}
-.refresh-btn{float:right;padding:4px 12px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:6px;color:#fff;font-family:'Noto Sans KR',sans-serif;font-size:11px;cursor:pointer}
-.refresh-btn:hover{background:rgba(255,255,255,.3)}
+.refresh-btn{padding:4px 12px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:6px;color:#fff;font-family:'Noto Sans KR',sans-serif;font-size:11px;cursor:pointer}
 .empty-state{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px}
-
-.admin-login {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.7);
-  z-index: 200;
-  display: none; align-items: center; justify-content: center;
-}
-.admin-login.open {
-  display: flex;
-}
-.admin-login-box {
-  background: var(--card);
-  border-radius: 16px;
-  padding: 32px 28px;
-  width: 300px;
-  text-align: center;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-}
-.admin-login-box .lock { font-size: 40px; margin-bottom: 12px; }
-.admin-login-box h3 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
-.admin-login-box p { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
-.admin-login-box input {
-  width: 100%; padding: 12px;
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: 15px; text-align: center;
-  letter-spacing: 4px; outline: none;
-  margin-bottom: 12px;
-}
-.admin-login-box input:focus { border-color: var(--navy); }
-.admin-login-box .login-btn {
-  width: 100%; padding: 12px;
-  background: var(--navy); color: #fff;
-  border: none; border-radius: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: 14px; font-weight: 700;
-  cursor: pointer;
-}
-.admin-login-box .login-btn:hover { background: var(--navy2); }
-.admin-login-box .error { font-size: 12px; color: var(--red); margin-top: 8px; display: none; }
 </style>
 </head>
 <body>
-
-<!-- 설정 배너: Apps Script URL 입력 -->
-<div class="setup-banner" id="setup-banner">
-  ⚙️ Apps Script 웹 앱 URL을 입력하세요:
-  <input type="text" id="gas-url" placeholder="https://script.google.com/macros/s/XXXXXXX/exec">
-  <button onclick="saveUrl()">저장</button>
-</div>
 
 <div class="header">
   <div class="header-icon">🚗</div>
@@ -162,6 +112,7 @@ textarea{resize:none;height:80px}
     <p>주차 질서 위반 신고 시스템</p>
   </div>
 </div>
+
 <div class="tabs">
   <div class="tab active" onclick="switchTab('report')">신고하기</div>
   <div class="tab" onclick="switchTab('admin')">관리자</div>
@@ -192,10 +143,9 @@ textarea{resize:none;height:80px}
       <div class="card">
         <div class="card-title">📷 증거 사진 <span style="font-size:11px;color:var(--red);font-weight:400">(필수)</span></div>
         <div class="photo-zone" id="pzone">
-          <input type="file" accept="image/*" multiple onchange="handlePhoto(event)">
+          <input type="file" accept="image/*" onchange="handlePhoto(event)">
           <div class="ic">📷</div>
           <p>사진을 촬영하거나 갤러리에서 선택하세요</p>
-          <p style="font-size:10px;margin-top:4px;color:#aaa">최대 3장</p>
         </div>
         <div class="photo-preview" id="ppreview"></div>
       </div>
@@ -205,9 +155,9 @@ textarea{resize:none;height:80px}
           <div class="reward-btn" onclick="selReward(this,'야시장상품권')"><span class="em">🏮</span><div class="nm">야시장 상품권</div><div class="ds">월 최대 10,000원</div></div>
           <div class="reward-btn" onclick="selReward(this,'커뮤니티할인')"><span class="em">🏊</span><div class="nm">커뮤니티 할인</div><div class="ds">이용료 월 최대 10,000원</div></div>
         </div>
-        <label>연락처 (이메일 — 포상 원할 경우만 입력)</label>
+        <label>연락처 이메일 (포상 원할 경우만)</label>
         <input type="text" id="contact" placeholder="예) example@gmail.com">
-        <p style="font-size:11px;color:var(--muted)">위반 확정 시 인증번호가 이메일로 발송됩니다. 관리사무소 내방 시 제시하면 포상을 드립니다.</p>
+        <p style="font-size:11px;color:var(--muted)">위반 확정 시 인증번호가 이메일로 발송됩니다.</p>
       </div>
       <button class="submit-btn" id="submit-btn" onclick="submitReport()">📨 신고 제출하기</button>
     </div>
@@ -220,10 +170,9 @@ textarea{resize:none;height:80px}
       <h2>신고가 접수되었습니다</h2>
       <p>관리사무소에서 현장 확인 또는 CCTV 영상을 검토한 후<br>처리 결과를 알려드립니다.</p>
       <div id="code-section" style="display:none;margin-top:16px">
-        <div class="code-box">
-          <div class="code-label">📬 위반 확정 후 입력하신 이메일로 인증번호가 발송됩니다</div>
-          <div class="code-num">★ ★ ★ ★ ★ ★</div>
-          <div class="code-hint">관리사무소 내방 시 이메일의 인증번호를 제시하세요</div>
+        <div style="background:#EAF3DE;border:2px solid var(--green);border-radius:12px;padding:16px;display:inline-block">
+          <div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:4px">📬 위반 확정 후 입력하신 이메일로 인증번호가 발송됩니다</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:6px">관리사무소 내방 시 이메일의 인증번호를 제시하세요</div>
         </div>
       </div>
       <button class="submit-btn" style="margin-top:24px;max-width:200px;margin-left:auto;margin-right:auto" onclick="resetForm()">다시 신고하기</button>
@@ -231,37 +180,37 @@ textarea{resize:none;height:80px}
   </div>
 </div>
 
-
-<!-- 관리자 로그인 오버레이 -->
-<div class="admin-login" id="admin-login">
-  <div class="admin-login-box">
-    <div class="lock">🔐</div>
-    <h3>관리자 로그인</h3>
-    <p>관리사무소 전용 페이지입니다.<br>비밀번호를 입력해 주세요.</p>
-    <input type="password" id="admin-pw" placeholder="비밀번호" maxlength="20"
-      onkeydown="if(event.key==='Enter') checkAdminPw()">
-    <button class="login-btn" onclick="checkAdminPw()">확인</button>
-    <div class="error" id="pw-error">비밀번호가 올바르지 않습니다.</div>
-  </div>
-</div>
 <!-- 관리자 탭 -->
 <div class="tab-content" id="tab-admin">
   <div class="content">
     <div class="admin-header">
-      <div><h2>🔐 관리자 대시보드</h2><p>관리사무소 전용 — 신고 처리 및 포상 관리</p></div>
-      <button class="refresh-btn" onclick="renderAdmin()">🔄 새로고침</button>
+      <div><h2>🔐 관리자 대시보드</h2><p>관리사무소 전용</p></div>
+      <button class="refresh-btn" onclick="loadAdmin()">🔄 새로고침</button>
     </div>
     <div class="stat-row">
       <div class="stat-card"><div class="stat-num" id="stat-total" style="color:var(--navy)">—</div><div class="stat-label">전체 신고</div></div>
       <div class="stat-card"><div class="stat-num" id="stat-pending" style="color:var(--amber)">—</div><div class="stat-label">처리 대기</div></div>
       <div class="stat-card"><div class="stat-num" id="stat-done" style="color:var(--green)">—</div><div class="stat-label">처리 완료</div></div>
     </div>
-    <div id="report-list"><div class="empty-state">⚙️ Apps Script URL을 설정하면 신고 목록이 표시됩니다.</div></div>
+    <div id="report-list"><div class="empty-state">로딩 중...</div></div>
   </div>
 </div>
 
-<!-- 모달 -->
-<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+<!-- 관리자 비밀번호 오버레이 -->
+<div class="pw-overlay" id="pw-overlay">
+  <div class="pw-box">
+    <div class="lock">🔐</div>
+    <h3>관리자 로그인</h3>
+    <p>관리사무소 전용 페이지입니다.<br>비밀번호를 입력해 주세요.</p>
+    <input type="password" id="pw-input" placeholder="••••" maxlength="20"
+      onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="pw-btn" onclick="checkPw()">확인</button>
+    <div class="pw-err" id="pw-err">비밀번호가 올바르지 않습니다.</div>
+  </div>
+</div>
+
+<!-- 신고 상세 모달 -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modal-title"></div>
@@ -272,58 +221,14 @@ textarea{resize:none;height:80px}
 </div>
 
 <script>
-
+const GAS = 'https://script.google.com/macros/s/AKfycbxlQ5CftV39dwoutqBgZ01Ejxq0v06OmahRj2e0riBcON5RQAFQoXlq3SF_7OX2SJGzhw/exec';
 const ADMIN_PW = '1234'; // ← 비밀번호 변경 시 여기 수정
-let adminUnlocked = false;
 
-function checkAdminPw() {
-  const pw = document.getElementById('admin-pw').value;
-  if (pw === ADMIN_PW) {
-    adminUnlocked = true;
-    document.getElementById('admin-login').classList.remove('open');
-    renderAdmin();
-  } else {
-    document.getElementById('pw-error').style.display = 'block';
-    document.getElementById('admin-pw').value = '';
-    document.getElementById('admin-pw').focus();
-  }
-}
+let sType = '', sReward = '', photoB64 = '', curReport = null, adminOK = false;
 
-let GAS_URL = 'https://script.google.com/macros/s/AKfycbzfTf_0zYY__rs-J4fJHK6k_lAPmXpPrPuw53NH4jeu26unpHiwtvawQwxaKSKoN-ngNg/exec';
-let sType='', sReward='', curReport=null;
-
-// ── URL 설정 ──
-window.addEventListener('DOMContentLoaded', () => {
-  if (GAS_URL) {
-    document.getElementById('gas-url').value = GAS_URL;
-    document.getElementById('setup-banner').style.background = '#EAF3DE';
-    document.getElementById('setup-banner').style.borderBottomColor = '#1D9E75';
-    document.getElementById('setup-banner').style.color = '#1D9E75';
-  }
-});
-function saveUrl() {
-  GAS_URL = document.getElementById('gas-url').value.trim();
-  if (!GAS_URL) { alert('URL을 입력해 주세요.'); return; }
-  localStorage.setItem('gas_url', GAS_URL);
-  const b = document.getElementById('setup-banner');
-  b.style.background = '#EAF3DE';
-  b.style.borderBottomColor = '#1D9E75';
-  b.style.color = '#1D9E75';
-  b.querySelector('button').textContent = '✅ 저장됨';
-  renderAdmin();
-}
-
-// ── GAS 호출 ──
-async function gasPost(body) {
-  if (!GAS_URL) throw new Error('Apps Script URL이 설정되지 않았습니다.');
-  // POST 대신 GET으로 전환 (Apps Script CORS 우회)
-  const params = new URLSearchParams(body).toString();
-  const res = await fetch(GAS_URL + '?' + params);
-  return res.json();
-}
-async function gasGet(params) {
-  if (!GAS_URL) throw new Error('Apps Script URL이 설정되지 않았습니다.');
-  const url = GAS_URL + '?' + new URLSearchParams(params).toString();
+// ── GAS 호출 (GET 방식) ──
+async function gas(params) {
+  const url = GAS + '?' + new URLSearchParams(params).toString();
   const res = await fetch(url);
   return res.json();
 }
@@ -333,192 +238,191 @@ function switchTab(t) {
   document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
   document.querySelector(`.tab[onclick="switchTab('${t}')"]`).classList.add('active');
-  document.getElementById('tab-'+t).classList.add('active');
+  document.getElementById('tab-' + t).classList.add('active');
   if (t === 'admin') {
-    if (!adminUnlocked) {
-      document.getElementById('admin-login').classList.add('open');
-      setTimeout(() => document.getElementById('admin-pw').focus(), 100);
+    if (!adminOK) {
+      document.getElementById('pw-overlay').style.display = 'flex';
+      setTimeout(() => document.getElementById('pw-input').focus(), 100);
     } else {
-      renderAdmin();
+      loadAdmin();
     }
   }
 }
 
-function selType(el, t) { document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('sel')); el.classList.add('sel'); sType=t; }
-function selReward(el, r) { document.querySelectorAll('.reward-btn').forEach(b=>b.classList.remove('sel')); el.classList.add('sel'); sReward=r; }
-
-let photoBase64 = '';
-function handlePhoto(e) {
-  const files = Array.from(e.target.files).slice(0,1); // 1장만 (용량 제한)
-  const pv = document.getElementById('ppreview');
-  pv.innerHTML = '';
-  photoBase64 = '';
-  if (files.length > 0) {
-    pv.style.display = 'flex';
-    document.getElementById('pzone').style.display = 'none';
-    const f = files[0];
-    const img = document.createElement('img');
-    img.src = URL.createObjectURL(f);
-    pv.appendChild(img);
-    // Base64 변환 (GAS로 전송용)
-    const reader = new FileReader();
-    reader.onload = ev => { photoBase64 = ev.target.result; };
-    reader.readAsDataURL(f);
+// ── 비밀번호 확인 ──
+function checkPw() {
+  const pw = document.getElementById('pw-input').value;
+  if (pw === ADMIN_PW) {
+    adminOK = true;
+    document.getElementById('pw-overlay').style.display = 'none';
+    document.getElementById('pw-input').value = '';
+    loadAdmin();
+  } else {
+    document.getElementById('pw-err').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
   }
+}
+
+// ── 신고 유형 선택 ──
+function selType(el, t) {
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel'); sType = t;
+}
+function selReward(el, r) {
+  document.querySelectorAll('.reward-btn').forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel'); sReward = r;
+}
+
+// ── 사진 처리 ──
+function handlePhoto(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const pv = document.getElementById('ppreview');
+  const img = document.createElement('img');
+  img.src = URL.createObjectURL(file);
+  pv.innerHTML = ''; pv.appendChild(img);
+  pv.style.display = 'flex';
+  document.getElementById('pzone').style.display = 'none';
+  const reader = new FileReader();
+  reader.onload = ev => { photoB64 = ev.target.result; };
+  reader.readAsDataURL(file);
 }
 
 // ── 신고 제출 ──
 async function submitReport() {
-  const plate = document.getElementById('plate').value.trim();
-  if (!sType)  { alert('신고 유형을 선택해 주세요.'); return; }
-  if (!plate)  { alert('위반 차량번호를 입력해 주세요.'); return; }
-  if (!GAS_URL){ alert('⚙️ 상단의 Apps Script URL을 먼저 설정해 주세요.'); return; }
+  if (!sType) { alert('신고 유형을 선택해 주세요.'); return; }
+  if (!document.getElementById('plate').value.trim()) { alert('위반 차량번호를 입력해 주세요.'); return; }
 
   document.getElementById('form-area').style.display = 'none';
   document.getElementById('loading-area').style.display = 'block';
 
   try {
-    const result = await gasPost({
-      action: 'submit',
-      type: sType,
-      plate,
+    const r = await gas({
+      action:   'submit',
+      type:     sType,
+      plate:    document.getElementById('plate').value.trim(),
       location: document.getElementById('location').value.trim(),
-      detail: document.getElementById('detail').value.trim(),
-      contact: document.getElementById('contact').value.trim(),
-      reward: sReward,
-      photo: photoBase64
+      detail:   document.getElementById('detail').value.trim(),
+      contact:  document.getElementById('contact').value.trim(),
+      reward:   sReward,
+      photo:    photoB64
     });
     document.getElementById('loading-area').style.display = 'none';
-    document.getElementById('success-area').style.display = 'block';
-    const contact = document.getElementById('contact').value.trim();
-    if (contact && sReward) document.getElementById('code-section').style.display = 'block';
-    if (!result.ok) throw new Error(result.msg);
-  } catch(err) {
+    if (r.ok) {
+      document.getElementById('success-area').style.display = 'block';
+      if (document.getElementById('contact').value.trim() && sReward)
+        document.getElementById('code-section').style.display = 'block';
+    } else {
+      alert('오류: ' + r.msg);
+      document.getElementById('form-area').style.display = 'block';
+    }
+  } catch(e) {
     document.getElementById('loading-area').style.display = 'none';
     document.getElementById('form-area').style.display = 'block';
-    alert('오류가 발생했습니다: ' + err.message);
+    alert('통신 오류: ' + e.message);
   }
 }
 
+// ── 폼 초기화 ──
 function resetForm() {
-  sType=''; sReward='';
-  document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('sel'));
-  document.querySelectorAll('.reward-btn').forEach(b=>b.classList.remove('sel'));
-  ['plate','location','detail','contact'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('ppreview').innerHTML='';
-  document.getElementById('ppreview').style.display='none';
-  document.getElementById('pzone').style.display='block';
-  document.getElementById('form-area').style.display='block';
-  document.getElementById('success-area').style.display='none';
-  document.getElementById('code-section').style.display='none';
+  sType = ''; sReward = ''; photoB64 = '';
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('sel'));
+  document.querySelectorAll('.reward-btn').forEach(b => b.classList.remove('sel'));
+  ['plate','location','detail','contact'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('ppreview').innerHTML = '';
+  document.getElementById('ppreview').style.display = 'none';
+  document.getElementById('pzone').style.display = 'block';
+  document.getElementById('form-area').style.display = 'block';
+  document.getElementById('success-area').style.display = 'none';
+  document.getElementById('code-section').style.display = 'none';
 }
 
-// ── 관리자 목록 ──
-async function renderAdmin() {
-  if (!GAS_URL) { document.getElementById('report-list').innerHTML='<div class="empty-state">⚙️ Apps Script URL을 설정하면 신고 목록이 표시됩니다.</div>'; return; }
+// ── 관리자 로드 ──
+async function loadAdmin() {
   document.getElementById('report-list').innerHTML = '<div class="empty-state">불러오는 중...</div>';
   try {
-    const [listRes, statsRes] = await Promise.all([
-      gasGet({ action: 'list' }),
-      gasGet({ action: 'stats' })
+    const [list, stats] = await Promise.all([
+      gas({action:'list'}), gas({action:'stats'})
     ]);
-    if (statsRes.ok) {
-      document.getElementById('stat-total').textContent   = statsRes.total;
-      document.getElementById('stat-pending').textContent = statsRes.pending;
-      document.getElementById('stat-done').textContent    = statsRes.done;
+    if (stats.ok) {
+      document.getElementById('stat-total').textContent = stats.total;
+      document.getElementById('stat-pending').textContent = stats.pending;
+      document.getElementById('stat-done').textContent = stats.done;
     }
-    if (listRes.ok && listRes.data.length > 0) {
-      const list = document.getElementById('report-list');
-      list.innerHTML = '';
-      listRes.data.forEach(r => {
-        const div = document.createElement('div');
-        div.className = 'report-item';
-        div.onclick = () => openModal(r);
-        div.innerHTML = `
-          <div class="report-top">
-            <div class="report-type">${emj(r['신고유형'])} ${r['신고유형']||'—'}</div>
-            <div class="badge ${badgeCls(r['처리상태'])}">${r['처리상태']||'—'}</div>
-          </div>
-          <div class="report-plate">${r['위반차량번호']||'—'}</div>
-          <div class="report-meta">${r['신고일시']||''} · ${r['위반장소']||'위치 미입력'}${r['연락처(선택)']?' · 📬 연락처 있음':''}</div>`;
-        list.appendChild(div);
-      });
-    } else {
-      document.getElementById('report-list').innerHTML = '<div class="empty-state">📭 접수된 신고가 없습니다.</div>';
+    const el = document.getElementById('report-list');
+    if (!list.ok || !list.data.length) {
+      el.innerHTML = '<div class="empty-state">📭 접수된 신고가 없습니다.</div>'; return;
     }
-  } catch(err) {
-    document.getElementById('report-list').innerHTML = `<div class="empty-state" style="color:var(--red)">⚠ 데이터 로드 실패: ${err.message}</div>`;
+    el.innerHTML = '';
+    list.data.forEach(r => {
+      const d = document.createElement('div');
+      d.className = 'report-item';
+      d.onclick = () => openModal(r);
+      d.innerHTML = `
+        <div class="report-top">
+          <div class="report-type">${emj(r['신고유형'])} ${r['신고유형']||'—'}</div>
+          <div class="badge ${bc(r['처리상태'])}">${r['처리상태']||'—'}</div>
+        </div>
+        <div class="report-plate">${r['위반차량번호']||'—'}</div>
+        <div class="report-meta">${r['신고일시']||''} · ${r['위반장소']||'위치 미입력'}${r['연락처(선택)']?' · 📬':''}</div>`;
+      el.appendChild(d);
+    });
+  } catch(e) {
+    document.getElementById('report-list').innerHTML = `<div class="empty-state" style="color:var(--red)">⚠ 오류: ${e.message}</div>`;
   }
 }
 
-function emj(t){ return t==='불법주정차'?'🚫':t==='블랙리스트의심'?'🔍':'⛔'; }
-function badgeCls(s){ return s==='접수대기'?'bp':s==='확인중'?'bv':s==='처리완료'?'bd':'br'; }
+function emj(t) { return t==='불법주정차'?'🚫':t==='블랙리스트의심'?'🔍':'⛔'; }
+function bc(s) { return s==='접수대기'?'bp':s==='확인중'?'bv':s==='처리완료'?'bd':'br'; }
 
 // ── 모달 ──
 function openModal(r) {
   curReport = r;
-  const type = r['신고유형']||'';
-  document.getElementById('modal-title').textContent = emj(type)+' '+type+' 신고 상세';
+  document.getElementById('modal-title').textContent = emj(r['신고유형']||'') + ' ' + (r['신고유형']||'') + ' 신고 상세';
+  const photo = r['사진URL'] ? `<div class="detail-row"><div class="detail-label">증거 사진</div><div class="detail-val"><a href="${r['사진URL']}" target="_blank" style="color:var(--navy2)">📷 사진 보기</a></div></div>` : '';
   document.getElementById('modal-body').innerHTML = `
     <div class="detail-row"><div class="detail-label">신고 ID</div><div class="detail-val" style="font-family:monospace;color:var(--muted)">${r['신고_ID']||'—'}</div></div>
     <div class="detail-row"><div class="detail-label">접수 일시</div><div class="detail-val">${r['신고일시']||'—'}</div></div>
     <div class="detail-row"><div class="detail-label">위반 차량</div><div class="detail-val" style="font-weight:700;font-size:16px">${r['위반차량번호']||'—'}</div></div>
     <div class="detail-row"><div class="detail-label">위반 장소</div><div class="detail-val">${r['위반장소']||'—'}</div></div>
     <div class="detail-row"><div class="detail-label">상세 내용</div><div class="detail-val">${r['상세설명']||'—'}</div></div>
+    ${photo}
     <div class="detail-row"><div class="detail-label">포상 선택</div><div class="detail-val">${r['포상선택']||'미선택'}</div></div>
-    <div class="detail-row"><div class="detail-label">연락처</div><div class="detail-val" style="color:var(--red)">${r['연락처(선택)']||'미입력 (익명)'}</div></div>
-    <div class="detail-row"><div class="detail-label">처리 상태</div><div class="detail-val"><span class="badge ${badgeCls(r['처리상태'])}">${r['처리상태']||'—'}</span></div></div>`;
+    <div class="detail-row"><div class="detail-label">연락처</div><div class="detail-val" style="color:var(--red)">${r['연락처(선택)']||'익명'}</div></div>
+    <div class="detail-row"><div class="detail-label">처리 상태</div><div class="detail-val"><span class="badge ${bc(r['처리상태'])}">${r['처리상태']||'—'}</span></div></div>`;
 
   const acts = document.getElementById('modal-actions');
   const cd   = document.getElementById('modal-code');
   cd.innerHTML = '';
 
-  if (r['처리상태']==='처리완료' && r['인증코드']) {
+  if (r['처리상태'] === '처리완료' && r['인증코드']) {
     acts.innerHTML = '';
-    cd.innerHTML = `<div class="auth-code-display"><div><div class="lbl">🔑 포상 인증번호</div><div class="cd">${r['인증코드']}</div></div><div style="font-size:11px;color:var(--muted)">내방 시<br>제시 확인</div></div>`;
-  } else if (r['처리상태']==='미확정') {
+    cd.innerHTML = `<div class="auth-code-display"><div><div class="lbl">🔑 포상 인증번호</div><div class="cd">${r['인증코드']}</div></div><div style="font-size:11px;color:var(--muted)">내방 시 제시</div></div>`;
+  } else if (r['처리상태'] === '미확정') {
     acts.innerHTML = '';
   } else {
-    acts.innerHTML = `<button class="action-btn ac" id="btn-confirm" onclick="processReport('확정')">✅ 위반 확정</button><button class="action-btn arj" id="btn-reject" onclick="processReport('미확정')">❌ 미확정 종결</button>`;
+    acts.innerHTML = `<button class="action-btn ac" onclick="process('confirm')">✅ 위반 확정</button><button class="action-btn arj" onclick="process('reject')">❌ 미확정 종결</button>`;
   }
   document.getElementById('modal').classList.add('open');
 }
 
-function closeModal(e) {
-  if (e.target === document.getElementById('modal')) {
-    document.getElementById('modal').classList.remove('open');
-    renderAdmin();
-  }
-}
+function closeModal() { document.getElementById('modal').classList.remove('open'); loadAdmin(); }
 
-async function processReport(result) {
-  if (!curReport) return;
-  const btnC = document.getElementById('btn-confirm');
-  const btnR = document.getElementById('btn-reject');
-  if (btnC) { btnC.disabled = true; btnR.disabled = true; }
-
+async function process(action) {
+  document.querySelectorAll('.action-btn').forEach(b => b.disabled = true);
   try {
-    const action = result === '확정' ? 'confirm' : 'reject';
-    const res = await gasPost({ action, id: curReport['신고_ID'] });
-    if (!res.ok) throw new Error(res.msg);
-
-    const acts = document.getElementById('modal-actions');
-    const cd   = document.getElementById('modal-code');
-    acts.innerHTML = '';
-
-    if (result === '확정') {
-      cd.innerHTML = `
-        <div class="auth-code-display">
-          <div><div class="lbl">🔑 인증번호 생성 완료${curReport['연락처(선택)']?' — 메일 발송됨':''}</div><div class="cd">${res.code}</div></div>
-          <div style="font-size:11px;color:var(--muted)">내방 시<br>제시 확인</div>
-        </div>
-        ${curReport['연락처(선택)']?'<p style="font-size:11px;color:var(--muted);margin-top:8px">📧 '+curReport['연락처(선택)']+'으로 결과 메일 발송</p>':''}`;
+    const r = await gas({ action, id: curReport['신고_ID'] });
+    const cd = document.getElementById('modal-code');
+    document.getElementById('modal-actions').innerHTML = '';
+    if (action === 'confirm' && r.ok) {
+      cd.innerHTML = `<div class="auth-code-display"><div><div class="lbl">🔑 인증번호 생성 완료${curReport['연락처(선택)']?' — 메일 발송':''}</div><div class="cd">${r.code}</div></div></div>`;
     } else {
-      cd.innerHTML = '<p style="font-size:12px;color:var(--red);margin-top:12px;text-align:center">미확정 처리 완료. 연락처가 있으면 결과 메일이 발송됩니다.</p>';
+      cd.innerHTML = '<p style="font-size:12px;color:var(--red);margin-top:12px;text-align:center">미확정 처리 완료.</p>';
     }
-  } catch(err) {
-    alert('처리 중 오류: ' + err.message);
-    if (btnC) { btnC.disabled = false; btnR.disabled = false; }
+  } catch(e) {
+    alert('오류: ' + e.message);
+    document.querySelectorAll('.action-btn').forEach(b => b.disabled = false);
   }
 }
 </script>
