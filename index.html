@@ -103,6 +103,44 @@ textarea{resize:none;height:80px}
 .refresh-btn{float:right;padding:4px 12px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:6px;color:#fff;font-family:'Noto Sans KR',sans-serif;font-size:11px;cursor:pointer}
 .refresh-btn:hover{background:rgba(255,255,255,.3)}
 .empty-state{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px}
+
+.admin-login {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+}
+.admin-login-box {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 32px 28px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+.admin-login-box .lock { font-size: 40px; margin-bottom: 12px; }
+.admin-login-box h3 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+.admin-login-box p { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+.admin-login-box input {
+  width: 100%; padding: 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 15px; text-align: center;
+  letter-spacing: 4px; outline: none;
+  margin-bottom: 12px;
+}
+.admin-login-box input:focus { border-color: var(--navy); }
+.admin-login-box .login-btn {
+  width: 100%; padding: 12px;
+  background: var(--navy); color: #fff;
+  border: none; border-radius: 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer;
+}
+.admin-login-box .login-btn:hover { background: var(--navy2); }
+.admin-login-box .error { font-size: 12px; color: var(--red); margin-top: 8px; display: none; }
 </style>
 </head>
 <body>
@@ -190,6 +228,19 @@ textarea{resize:none;height:80px}
   </div>
 </div>
 
+
+<!-- 관리자 로그인 오버레이 -->
+<div class="admin-login" id="admin-login">
+  <div class="admin-login-box">
+    <div class="lock">🔐</div>
+    <h3>관리자 로그인</h3>
+    <p>관리사무소 전용 페이지입니다.<br>비밀번호를 입력해 주세요.</p>
+    <input type="password" id="admin-pw" placeholder="비밀번호" maxlength="20"
+      onkeydown="if(event.key==='Enter') checkAdminPw()">
+    <button class="login-btn" onclick="checkAdminPw()">확인</button>
+    <div class="error" id="pw-error">비밀번호가 올바르지 않습니다.</div>
+  </div>
+</div>
 <!-- 관리자 탭 -->
 <div class="tab-content" id="tab-admin">
   <div class="content">
@@ -218,6 +269,23 @@ textarea{resize:none;height:80px}
 </div>
 
 <script>
+
+const ADMIN_PW = '1234'; // ← 비밀번호 변경 시 여기 수정
+let adminUnlocked = false;
+
+function checkAdminPw() {
+  const pw = document.getElementById('admin-pw').value;
+  if (pw === ADMIN_PW) {
+    adminUnlocked = true;
+    document.getElementById('admin-login').style.display = 'none';
+    renderAdmin();
+  } else {
+    document.getElementById('pw-error').style.display = 'block';
+    document.getElementById('admin-pw').value = '';
+    document.getElementById('admin-pw').focus();
+  }
+}
+
 let GAS_URL = 'https://script.google.com/macros/s/AKfycbzfTf_0zYY__rs-J4fJHK6k_lAPmXpPrPuw53NH4jeu26unpHiwtvawQwxaKSKoN-ngNg/exec';
 let sType='', sReward='', curReport=null;
 
@@ -263,20 +331,36 @@ function switchTab(t) {
   document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
   document.querySelector(`.tab[onclick="switchTab('${t}')"]`).classList.add('active');
   document.getElementById('tab-'+t).classList.add('active');
-  if (t === 'admin') renderAdmin();
+  if (t === 'admin') {
+    if (!adminUnlocked) {
+      document.getElementById('admin-login').style.display = 'flex';
+      setTimeout(() => document.getElementById('admin-pw').focus(), 100);
+    } else {
+      renderAdmin();
+    }
+  }
 }
 
 function selType(el, t) { document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('sel')); el.classList.add('sel'); sType=t; }
 function selReward(el, r) { document.querySelectorAll('.reward-btn').forEach(b=>b.classList.remove('sel')); el.classList.add('sel'); sReward=r; }
 
+let photoBase64 = '';
 function handlePhoto(e) {
-  const files = Array.from(e.target.files).slice(0,3);
+  const files = Array.from(e.target.files).slice(0,1); // 1장만 (용량 제한)
   const pv = document.getElementById('ppreview');
   pv.innerHTML = '';
+  photoBase64 = '';
   if (files.length > 0) {
     pv.style.display = 'flex';
     document.getElementById('pzone').style.display = 'none';
-    files.forEach(f => { const img = document.createElement('img'); img.src = URL.createObjectURL(f); pv.appendChild(img); });
+    const f = files[0];
+    const img = document.createElement('img');
+    img.src = URL.createObjectURL(f);
+    pv.appendChild(img);
+    // Base64 변환 (GAS로 전송용)
+    const reader = new FileReader();
+    reader.onload = ev => { photoBase64 = ev.target.result; };
+    reader.readAsDataURL(f);
   }
 }
 
@@ -298,7 +382,8 @@ async function submitReport() {
       location: document.getElementById('location').value.trim(),
       detail: document.getElementById('detail').value.trim(),
       contact: document.getElementById('contact').value.trim(),
-      reward: sReward
+      reward: sReward,
+      photo: photoBase64
     });
     document.getElementById('loading-area').style.display = 'none';
     document.getElementById('success-area').style.display = 'block';
